@@ -2,11 +2,13 @@ package com.study.jpa.repository;
 
 import com.study.jpa.entity.Member;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Repository
+@Transactional
 public class MemberJpaRepository {
 
     @PersistenceContext
