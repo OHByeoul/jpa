@@ -1,10 +1,15 @@
 package com.study.jpa.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id","name"})
 public class Team {
     @Id
     @GeneratedValue
@@ -14,4 +19,8 @@ public class Team {
 
     @OneToMany
     private List<Member> members = new ArrayList<>();
+
+    public Team(String teamName){
+        this.name = teamName;
+    }
 }

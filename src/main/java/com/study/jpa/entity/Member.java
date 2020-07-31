@@ -1,12 +1,13 @@
 package com.study.jpa.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id","username","age"})
 public class Member {
     @Id
     @GeneratedValue
@@ -19,12 +20,13 @@ public class Member {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    protected Member(){
-
-    }
-
     public Member(String name){
         this.username = name;
+    }
+
+    public void changeTeam(Team team){
+        this.team = team;
+        team.getMembers().add(this);
     }
 
 
