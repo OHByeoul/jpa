@@ -30,6 +30,10 @@ public class MemberJpaRepository {
         return Optional.ofNullable(member);
     }
 
+    public long count(){
+        return em.createQuery("select count(m) from Member m",Long.class).getSingleResult();
+    }
+
     public List<Member> findAll(){
         return em.createQuery("select m from Member m",Member.class).getResultList();
     }
