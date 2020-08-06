@@ -58,4 +58,11 @@ class MemberRepositoryTest {
         assertThat(deletecnt).isEqualTo(0);
     }
 
+    @Test
+    public void 상위5개받아오기(){
+        List<Member> top5By = memberRepository.findTop5By();
+    }
+
+
+
 }
