@@ -1,0 +1,20 @@
+package com.study.jpa.dto;
+
+import lombok.Data;
+
+@Data
+public class MemberDto {
+    private Long id;
+    private String username;
+    private String name;
+
+
+    public MemberDto(Long id, String username, String teamName) {
+        this.id = id;
+        this.username = username;
+        this.name = teamName;
+    }
+
+
+
+}

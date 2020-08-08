@@ -1,6 +1,8 @@
 package com.study.jpa.repository;
 
+import com.study.jpa.dto.MemberDto;
 import com.study.jpa.entity.Member;
+import com.study.jpa.entity.Team;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    TeamRepository teamRepository;
 
     @Test
     public void testMember(){
@@ -73,5 +78,20 @@ class MemberRepositoryTest {
 
         List<Member> findMember = memberRepository.findUser("member2", 10);
         assertThat(findMember.get(0).getUsername()).isEqualTo(member2.getUsername());
+    }
+
+    @Test
+    public void testMemberDto(){
+        Team team1 = new Team("team1");
+        teamRepository.save(team1);
+
+        Member member1 = new Member("member1",20);
+        member1.setTeam(team1);
+        memberRepository.save(member1);
+
+        List<MemberDto> userByMemberDto = memberRepository.findUserByMemberDto();
+        for (MemberDto memberDto : userByMemberDto) {
+            System.out.println("memberDto = " + memberDto);
+        }
     }
 }
