@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,5 +94,18 @@ class MemberRepositoryTest {
         for (MemberDto memberDto : userByMemberDto) {
             System.out.println("memberDto = " + memberDto);
         }
+    }
+
+    @Test
+    public void testCollection(){
+        Member member = new Member("mem1", 10);
+        Member member2 = new Member("mem2", 20);
+        memberRepository.save(member);
+        memberRepository.save(member2);
+
+        List<Member> userByName = memberRepository.findUserByName(Arrays.asList("mem1", "mem2"));
+        assertThat(userByName.get(0)).isEqualTo(member);
+        assertThat(userByName.get(1)).isEqualTo(member2);
+
     }
 }
