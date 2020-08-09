@@ -2,6 +2,7 @@ package com.study.jpa.repository;
 
 import com.study.jpa.entity.Member;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -88,5 +89,25 @@ class MemberJpaRepositoryTest  {
         assertThat(findMember.get(0).getUsername()).isEqualTo(member1.getUsername());
     }
 
+    @DisplayName("순수jpa페이징 테스트")
+    @Test
+    public void findByPaging(){
+        Member member = new Member("mem1", 10);
+        Member member2= new Member("mem2", 10);
+        Member member3= new Member("mem3", 10);
+        Member member4= new Member("mem4", 10);
+        Member member5= new Member("mem5", 10);
 
+        memberJpaRepository.save(member);
+        memberJpaRepository.save(member2);
+        memberJpaRepository.save(member3);
+        memberJpaRepository.save(member4);
+        memberJpaRepository.save(member5);
+
+        List<Member> byPage = memberJpaRepository.findByPage(10, 0, 4);
+        Long totalCount = memberJpaRepository.totalCount(10);
+
+        assertThat(byPage.size()).isEqualTo(4);
+        assertThat(totalCount).isEqualTo(5);
+    }
 }
