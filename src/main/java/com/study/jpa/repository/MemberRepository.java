@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member,Long> {
     List<Member> findTop5By();
@@ -19,4 +20,14 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     @Query("select m from Member m where username in :names")
     List<Member> findUserByName(@Param("names") List<String> names);
+
+    @Query("select m from Member m where username = :username")
+    Member findMemberByName(@Param("username") String username);
+
+    @Query("select m from Member m where age = :age")
+    List<Member> findMemberListByAge(@Param("age") int age);
+
+    @Query("select m from Member m where username = :username")
+    Optional<Member> findOptionalMemberByName(@Param("username") String username);
+
 }

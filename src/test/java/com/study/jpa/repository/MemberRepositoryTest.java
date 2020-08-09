@@ -3,6 +3,7 @@ package com.study.jpa.repository;
 import com.study.jpa.dto.MemberDto;
 import com.study.jpa.entity.Member;
 import com.study.jpa.entity.Team;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -107,5 +108,39 @@ class MemberRepositoryTest {
         assertThat(userByName.get(0)).isEqualTo(member);
         assertThat(userByName.get(1)).isEqualTo(member2);
 
+    }
+
+    @DisplayName("단건조회")
+    @Test
+    public void testSingleResult(){
+        Member member = new Member("mem1", 10);
+        memberRepository.save(member);
+
+        Member mem = memberRepository.findMemberByName("mem1");
+        assertThat(mem.getUsername()).isEqualTo(member.getUsername());
+    }
+
+    @DisplayName("여러건조회")
+    @Test
+    public void testManyResult(){
+        Member member = new Member("mem1", 10);
+        Member member2 = new Member("mem2", 20);
+        memberRepository.save(member);
+        memberRepository.save(member2);
+
+        List<Member> memberList = memberRepository.findMemberListByAge(10);
+        assertThat(memberList.get(0)).isEqualTo(member);
+    }
+
+    @DisplayName("Optional조회")
+    @Test
+    public void testOptionalResult(){
+        Member member = new Member("mem1", 10);
+        Member member2 = new Member("mem2", 20);
+        memberRepository.save(member);
+        memberRepository.save(member2);
+
+        Optional<Member> findMember = memberRepository.findOptionalMemberByName("mem1");
+        System.out.println("member = " + findMember);
     }
 }
