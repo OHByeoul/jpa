@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -146,7 +147,7 @@ class MemberRepositoryTest {
         Optional<Member> findMember = memberRepository.findOptionalMemberByName("mem1");
         System.out.println("member = " + findMember);
     }
-
+/*
     @DisplayName("jpaPaing테스트")
     @Test
     public void findByAge(){
@@ -166,7 +167,7 @@ class MemberRepositoryTest {
 
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "username"));
 
-        Page<Member> page = memberRepository.findByAge(20, pageRequest);
+   //     Page<Member> page = memberRepository.findByAge(20, pageRequest);
 
         List<Member> content = page.getContent();
         long totalElements = page.getTotalElements();
@@ -175,6 +176,37 @@ class MemberRepositoryTest {
         assertThat(page.getTotalElements()).isEqualTo(5);
         assertThat(page.getNumber()).isEqualTo(0);
         assertThat(page.getTotalPages()).isEqualTo(2);
+        assertThat(page.isFirst()).isTrue();
+        assertThat(page.hasNext()).isTrue();
+
+
+    }
+*/
+    @DisplayName("jpa Slice 테스트")
+    @Test
+    public void findByName(){
+        Member member = new Member("mem1", 20);
+        Member member2 = new Member("mem2", 20);
+        Member member3 = new Member("mem3", 20);
+        Member member4 = new Member("mem4", 20);
+        Member member5 = new Member("mem5", 20);
+
+        memberRepository.save(member);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        memberRepository.save(member4);
+        memberRepository.save(member5);
+
+        int age = 20;
+
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "age"));
+
+        Slice<Member> page = memberRepository.findByAge(age, pageRequest);
+
+        List<Member> content = page.getContent();
+
+        assertThat(content.size()).isEqualTo(3);
+        assertThat(page.getNumber()).isEqualTo(0);
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
 
