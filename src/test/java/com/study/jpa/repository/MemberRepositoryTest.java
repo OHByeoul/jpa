@@ -182,6 +182,7 @@ class MemberRepositoryTest {
 
     }
 */
+
     @DisplayName("jpa Slice 테스트")
     @Test
     public void findByName(){
@@ -210,6 +211,38 @@ class MemberRepositoryTest {
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
 
+    }
+
+    @DisplayName("jpa dto paging 테스트")
+    @Test
+    public void findUserForPageByName(){
+        Member member = new Member("mem1", 20);
+        Member member2 = new Member("mem1", 30);
+        Member member3 = new Member("mem1", 40);
+        Member member4 = new Member("mem1", 50);
+        Member member5 = new Member("mem1", 60);
+
+        memberRepository.save(member);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+        memberRepository.save(member4);
+        memberRepository.save(member5);
+
+        String username = "mem1";
+
+        PageRequest pageRequest = PageRequest.of(0, 4, Sort.by(Sort.Direction.DESC, "age"));
+
+        Page<Member> userForPageByName = memberRepository.findUserForPageByUsername(username, pageRequest);
+
+        Page<MemberDto> memDto = userForPageByName.map(mem -> new MemberDto(mem.getId(), mem.getUsername(), null));
+
+
+        List<MemberDto> content = memDto.getContent();
+
+        assertThat(content.size()).isEqualTo(4);
+        assertThat(memDto.getNumber()).isEqualTo(0);
+        assertThat(memDto.isFirst()).isTrue();
+        assertThat(memDto.hasNext()).isTrue();
 
     }
 }

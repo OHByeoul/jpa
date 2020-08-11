@@ -35,5 +35,7 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Slice<Member> findByAge(int age, Pageable pageable);
 
+    Page<Member> findUserForPageByUsername(String username, Pageable pageable);
+
   //  Slice<Member> findByAge2(int age, Pageable pageable);
 }
