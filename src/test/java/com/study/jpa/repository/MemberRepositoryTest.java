@@ -13,6 +13,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,9 @@ class MemberRepositoryTest {
 
     @Autowired
     TeamRepository teamRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Test
     public void testMember(){
@@ -244,5 +249,39 @@ class MemberRepositoryTest {
         assertThat(memDto.isFirst()).isTrue();
         assertThat(memDto.hasNext()).isTrue();
 
+    }
+
+    @DisplayName("순수jpa 벌크업데이트")
+    @Test
+    public void bulkUpdate(){
+        Member member = new Member("mem1", 10);
+        Member member2 = new Member("mem2", 20);
+        Member member3 = new Member("mem3", 30);
+
+        memberRepository.save(member);
+        memberRepository.save(member2);
+        memberRepository.save(member3);
+
+        int resultCount = memberRepository.bulkUpdate(20);
+       // em.flush();
+      //  em.clear();
+
+        Member updatedMem = memberRepository.findMemberByName("mem2");
+        Member updatedMem2 = memberRepository.findMemberByName("mem3");
+
+        assertThat(updatedMem.getAge()).isEqualTo(21);
+        assertThat(updatedMem2.getAge()).isEqualTo(31);
+
+        assertThat(resultCount).isEqualTo(2);
+
+
+
+
+        //System.out.println("result = " + result);
+
+          /*
+        if(result > 0){
+
+        }*/
     }
 }

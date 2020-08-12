@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -37,5 +38,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Page<Member> findUserForPageByUsername(String username, Pageable pageable);
 
+    @Modifying(clearAutomatically = true) // 변경할때는 무조건 써줘야함 안써주면 executeUpdate를 하는 것이 아닌 getSingleResult나 getResultList가 호출된다.
+                                        //clearAutomatically를 써주면 em.clear()가 호출되면서 1차 캐시를 비운다.
+    @Query("update Member m set m.age = m.age+1 where m.age >= :age")
+    int bulkUpdate(@Param("age") int age);
   //  Slice<Member> findByAge2(int age, Pageable pageable);
 }
