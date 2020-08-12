@@ -110,4 +110,28 @@ class MemberJpaRepositoryTest  {
         assertThat(byPage.size()).isEqualTo(4);
         assertThat(totalCount).isEqualTo(5);
     }
+
+    @DisplayName("순수jpa 벌크업데이트")
+    @Test
+    public void bulkUpdate(){
+        Member member = new Member("mem1", 10);
+        Member member2 = new Member("mem2", 20);
+        Member member3 = new Member("mem3", 30);
+
+        memberJpaRepository.save(member);
+        memberJpaRepository.save(member2);
+        memberJpaRepository.save(member3);
+
+        int resultCount = memberJpaRepository.bulkUpdate(20);
+      //  List<Member> updatedMem = memberJpaRepository.findByUsername("mem2");
+       // List<Member> updatedMem2 = memberJpaRepository.findByUsername("mem3");
+
+        //System.out.println("result = " + result);
+          assertThat(resultCount).isEqualTo(2);
+          /*
+        if(result > 0){
+            assertThat(updatedMem.get(0).getAge()).isEqualTo(21);
+            assertThat(updatedMem2.get(0).getAge()).isEqualTo(31);
+        }*/
+    }
 }
