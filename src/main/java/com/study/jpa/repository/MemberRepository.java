@@ -5,6 +5,7 @@ import com.study.jpa.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -42,5 +43,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
                                         //clearAutomatically를 써주면 em.clear()가 호출되면서 1차 캐시를 비운다.
     @Query("update Member m set m.age = m.age+1 where m.age >= :age")
     int bulkUpdate(@Param("age") int age);
+
+    @EntityGraph(attributePaths = "team")
+    @Override
+    List<Member> findAll();
   //  Slice<Member> findByAge2(int age, Pageable pageable);
 }

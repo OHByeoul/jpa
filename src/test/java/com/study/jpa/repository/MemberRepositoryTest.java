@@ -251,7 +251,7 @@ class MemberRepositoryTest {
 
     }
 
-    @DisplayName("순수jpa 벌크업데이트")
+    @DisplayName("data jpa 벌크업데이트")
     @Test
     public void bulkUpdate(){
         Member member = new Member("mem1", 10);
@@ -273,15 +273,34 @@ class MemberRepositoryTest {
         assertThat(updatedMem2.getAge()).isEqualTo(31);
 
         assertThat(resultCount).isEqualTo(2);
-
-
-
-
-        //System.out.println("result = " + result);
-
-          /*
-        if(result > 0){
-
-        }*/
     }
+
+    @DisplayName("data jpa 엔티티 그래프 테스트")
+    @Test
+    public void findAllEntitiGraphTest(){
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+
+        Member member = new Member("mem1", 10);
+        Member member2 = new Member("mem2", 20);
+        member.setTeam(teamA);
+        member.setTeam(teamB);
+        memberRepository.save(member);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        List<Member> members = memberRepository.findAll();
+
+        for (Member member1 : members) {
+            System.out.println("member1 = " + member1);
+            System.out.println("member1.team = " + member1.getTeam());
+        }
+
+        assertThat(members.get(0).getTeam().getClass()).isEqualTo(Team.class);
+    }
+
 }
