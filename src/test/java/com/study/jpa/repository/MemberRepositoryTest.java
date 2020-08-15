@@ -328,4 +328,20 @@ class MemberRepositoryTest {
 
     }
 
+
+    @DisplayName("락 테스트")
+    @Test
+    public void testLock(){
+        Member member1 = new Member("mem1", 12);
+        Member member2 = new Member("mem1", 20);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        em.flush();
+        em.clear();
+
+        String username = "mem1";
+        List<Member> memberByUsername = memberRepository.findMemberLockByUsername(username);
+
+    }
+
 }

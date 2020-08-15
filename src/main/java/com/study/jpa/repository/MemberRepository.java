@@ -8,6 +8,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.LockModeType;
 import javax.persistence.QueryHint;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +47,9 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Override
     List<Member> findAll();
 
-    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true")) // setxx를 통해 값을 변경하더라도 디비에 업데이트 쿼리가 날라가지 않음
     List<Member> findMemberByUsername(@Param("username") String name);
-  //  Slice<Member> findByAge2(int age, Pageable pageable);
+
+   @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Member> findMemberLockByUsername(@Param("username") String name);
 }
