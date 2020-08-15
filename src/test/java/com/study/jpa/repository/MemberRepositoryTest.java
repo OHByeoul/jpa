@@ -303,4 +303,29 @@ class MemberRepositoryTest {
         assertThat(members.get(0).getTeam().getClass()).isEqualTo(Team.class);
     }
 
+    @DisplayName("쿼리힌트 테스트")
+    @Test
+    public void queryHint(){
+        Member member1 = new Member("mem1", 12);
+        Member member2 = new Member("mem1", 20);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+        em.flush();
+        em.clear();
+        
+        String username = "mem1";
+        List<Member> memberByUsername = memberRepository.findMemberByUsername(username);
+        for (Member member : memberByUsername) {
+            member.setUsername("mem2");
+        }
+
+        em.flush();
+        em.clear();
+
+        List<Member> memberByUsername2 = memberRepository.findMemberByUsername(username);
+        assertThat(memberByUsername2.get(0).getUsername()).isEqualTo("mem1");
+        assertThat(memberByUsername2.get(1).getUsername()).isEqualTo("mem1");
+
+    }
+
 }
