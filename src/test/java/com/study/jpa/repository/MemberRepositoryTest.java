@@ -344,4 +344,10 @@ class MemberRepositoryTest {
 
     }
 
+    @DisplayName("커스텀 테스트")
+    @Test
+    public void testCustom(){
+        List<Member> memberCustom = memberRepository.findMemberCustom();
+    }
+
 }
