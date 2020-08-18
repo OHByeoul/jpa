@@ -1,6 +1,7 @@
 package com.study.jpa.entity;
 
 import com.study.jpa.repository.MemberRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -67,7 +68,28 @@ class MemberTest {
         List<Member> mem2 = memberRepository.findMemberByUsername("mem2");
 
         System.out.println("mem2 createdDate = " + mem2.get(0).getCreatedDate());
-        System.out.println("mem2 updatedDate = " + mem2.get(0).getUpdatedDate());
+   //     System.out.println("mem2 updatedDate = " + mem2.get(0).getUpdatedDate());
+    }
+
+
+    @DisplayName("data jpa auditing 테스트")
+    @Test
+    public void BaseEntityTest() throws InterruptedException {
+        Member member = new Member("mem1", 20);
+        memberRepository.save(member); //PrePersist가 save전에 호출
+
+        Thread.sleep(1000);
+        member.setUsername("mem2");
+
+        em.flush(); //PreUpdate 가 호출
+        em.clear();
+
+        List<Member> mem2 = memberRepository.findMemberByUsername("mem2");
+
+        System.out.println("mem2 createdDate = " + mem2.get(0).getCreatedDate());
+        System.out.println("mem2 lastModifiedDate = " + mem2.get(0).getLastModifiedDate());
+        System.out.println("mem2.get(0).getCreatedBy() = " + mem2.get(0).getCreatedBy());
+        System.out.println("mem2.get(0).getLastModifiedBy() = " + mem2.get(0).getLastModifiedBy());
     }
 
 }
