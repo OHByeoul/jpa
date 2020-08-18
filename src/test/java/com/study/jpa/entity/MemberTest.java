@@ -1,6 +1,8 @@
 package com.study.jpa.entity;
 
+import com.study.jpa.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberTest {
     @PersistenceContext
     EntityManager em;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
     public void testEntity(){
@@ -47,4 +52,22 @@ class MemberTest {
             System.out.println("member.team = " + member.getTeam());
         }
     }
+
+    @Test
+    public void jpaBaseEntityTest() throws InterruptedException {
+        Member member = new Member("mem1", 20);
+        memberRepository.save(member); //PrePersist가 save전에 호출
+
+        Thread.sleep(1000);
+        member.setUsername("mem2");
+
+        em.flush(); //PreUpdate 가 호출
+        em.clear();
+
+        List<Member> mem2 = memberRepository.findMemberByUsername("mem2");
+
+        System.out.println("mem2 createdDate = " + mem2.get(0).getCreatedDate());
+        System.out.println("mem2 updatedDate = " + mem2.get(0).getUpdatedDate());
+    }
+
 }
