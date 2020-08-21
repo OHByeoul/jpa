@@ -5,6 +5,8 @@ import com.study.jpa.repository.MemberRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +30,18 @@ public class MemberController {
         return mem.getUsername();
     }
 
+    @GetMapping("/members")
+    public Page<Member> findMembers(Pageable pageable){
+        Page<Member> page = memberRepository.findAll(pageable);
+        return page;
+    }
+
     @PostConstruct
     public void init(){
-        memberRepository.save(new Member("mem1"));
-
+    //    memberRepository.save(new Member("mem1"));
+        for (int i = 0; i<100; i++) {
+            memberRepository.save(new Member("mem"+i,i));
+        }
     }
 
 
