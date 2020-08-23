@@ -2,6 +2,7 @@ package com.study.jpa.repository;
 
 import com.study.jpa.dto.MemberDto;
 import com.study.jpa.entity.Member;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -55,4 +56,6 @@ public interface MemberRepository extends JpaRepository<Member,Long>, MemberRepo
 
    @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<Member> findMemberLockByUsername(@Param("username") String name);
+
+   List<UsernameOnly> findProjectionsByUsername(@Param("username") String name);
 }

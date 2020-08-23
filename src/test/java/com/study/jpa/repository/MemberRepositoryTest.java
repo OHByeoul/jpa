@@ -350,4 +350,27 @@ class MemberRepositoryTest {
         List<Member> memberCustom = memberRepository.findMemberCustom();
     }
 
+    @DisplayName("프로젝션 테스트")
+    @Test
+    public void testProejction(){
+        Team team1 = new Team("team1");
+        teamRepository.save(team1);
+
+        Member member = new Member("mem1", 12, team1);
+        Member member2 = new Member("mem2", 22,team1);
+        memberRepository.save(member);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        String n2 = "mem1";
+        List<UsernameOnly> projectionsByUsername = memberRepository.findProjectionsByUsername(n2);
+
+        for (UsernameOnly usernameOnly : projectionsByUsername) {
+            System.out.println("usernameOnly = " + usernameOnly);
+        }
+
+
+    }
 }
