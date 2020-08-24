@@ -58,4 +58,6 @@ public interface MemberRepository extends JpaRepository<Member,Long>, MemberRepo
     List<Member> findMemberLockByUsername(@Param("username") String name);
 
    List<UsernameOnly> findProjectionsByUsername(@Param("username") String name);
+
+    List<UsernameOnlyDto> findProjections2ByUsername(@Param("username") String name);
 }
